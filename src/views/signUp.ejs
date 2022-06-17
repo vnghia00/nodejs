@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row mt-5 ml-2 mr-2 ">
+            <form action="/postSignUp" method="POST">
+                <div class="form-row">
+                    <div class="col-12">
+                        <b>tao tk nhan vien</b>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" />
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" class="form-control" name="password" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="fullName">Họ tên</label>
+                        <input type="text" class="form-control" name="fullName" />
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="phoneNumber">Số điện thoại</label>
+                        <input type="text" class="form-control" name="phoneNumber" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="gender">Giới tính</label>
+                        <select name="gender" class="form-control">
+                            <option value="1">Nam</option>
+                            <option value="0">Nữ</option>
+                            <option value="2">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="roleId">Chức vụ</label>
+                        <select name="roleId" class="form-control">
+                            <option value="0">Thủ kho</option>
+                            <option value="1">Thu ngân</option>
+                            <option value="2">Quản lý</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
