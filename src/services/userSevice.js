@@ -1,5 +1,9 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer"
+
+require('dotenv').config
+
 const { Op } = require("sequelize");
 
 const salt = bcrypt.genSaltSync(10);
@@ -50,6 +54,103 @@ const handleUserLogin = (email, password) => {
 							message: "Sai mật khẩu.",
 						});
 					}
+				} else {
+					resolve({
+						errCode: 2,
+						message: "Email không tồn tại.",
+					});
+				}
+			}
+		} catch (e) {
+			reject(e);
+		}
+	});
+};
+
+const sendMail = async (email, code)=>{
+	let transporter = nodemailer.createTransport({
+		host: "smtp.gmail.com",
+		port: 587,
+		secure: false, 
+		auth: {
+		  user: 'hifive.tech.app@gmail.com', 
+		  pass: 'nfmgiojgbjvqmihf', 
+		},
+	  });
+	
+	let info = await transporter.sendMail({
+		from: '"No reply" noreply@gmail.com', 
+		to: email, 
+		subject: "Đổi mật khẩu tài khoản", 
+		html: `<b>CODE: ${code}</b>`, 
+	});
+}
+
+const handleUserForgot = (email) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			if (!email) {
+				resolve({
+					errCode: 1,
+					message: "Vui lòng nhập đủ thông tin.",
+				});
+			} else {
+				const user = await db.nhanVien.findOne({
+					where: {email: email},
+					raw: false,
+				});
+				if (user) {
+					const token = Math.floor(10000 + Math.random() * 90000).toString();
+					user.code = token;
+					await user.save();
+					sendMail(email, token);
+					resolve({
+						errCode: 0,
+						message: "Mã thay đỗi mật khẩu đã được gửi tới email",
+					});
+				} else {
+					resolve({
+						errCode: 2,
+						message: "Email không tồn tại.",
+					});
+				}
+			}
+		} catch (e) {
+			reject(e);
+		}
+	});
+};
+
+const handleUserCheckCode = (email,code,password) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			if (!email||!password||!code) {
+				resolve({
+					errCode: 1,
+					message: "Vui lòng nhập đủ thông tin.",
+				});
+			} else {
+				const user = await db.nhanVien.findOne({
+					where: {email: email},
+					raw: false,
+				});
+				if (user) {
+					if (user.code==code) {
+						const hashPasswordFromBcrypt = await hashUserPassword(password);
+						user.code = "";
+						user.matKhau = hashPasswordFromBcrypt;
+						await user.save();
+						resolve({
+							errCode: 0,
+							message: "Đỗi mật khẩu thành công",
+						});
+					}else{
+						resolve({
+							errCode: 3,
+							message: "Sai mật mã",
+						});
+					}
+				
 				} else {
 					resolve({
 						errCode: 2,
@@ -1123,6 +1224,8 @@ module.exports = {
 	updateUser: updateUser,
 	deleteUser: deleteUser,
 
+	handleUserForgot: handleUserForgot,
+	handleUserCheckCode:handleUserCheckCode,
 	handleAdminLogin: handleAdminLogin,
 
 	getAllCV: getAllCV,

@@ -11,6 +11,29 @@ const handleLogin = async (req, res) => {
 		user: userData.user || [],
 	});
 };
+const handleForgot = async (req, res) => {
+	const email = req.body.email;
+
+	const userData = await userSevice.handleUserForgot(email);
+	return res.status(200).json({
+		errCode: userData.errCode,
+		message: userData.message,
+		user: userData.user || [],
+	});
+};
+const handleCheckCode = async (req, res) => {
+	const email = req.body.email;
+	const code = req.body.code;
+	const password = req.body.password;
+
+
+	const userData = await userSevice.handleUserCheckCode(email, code, password);
+	return res.status(200).json({
+		errCode: userData.errCode,
+		message: userData.message,
+		user: userData.user || [],
+	});
+};
 const handleLoginAdmin = async (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
@@ -365,7 +388,9 @@ module.exports = {
 	handleCreateNewUser: handleCreateNewUser,
 	handleEditUser: handleEditUser,
 	handleDeleteUser: handleDeleteUser,
-	
+
+	handleForgot:handleForgot,
+	handleCheckCode:handleCheckCode,
 	handleLoginAdmin: handleLoginAdmin,
 	
 	handleGetCV: handleGetCV,

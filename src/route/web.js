@@ -15,6 +15,8 @@ const initWebRoutes = (app) => {
 	router.put("/api/update-user", userController.handleEditUser);
 	router.delete("/api/delete-user", userController.handleDeleteUser);
 
+	router.post("/api/forgot", userController.handleForgot);
+	router.post("/api/check-code", userController.handleCheckCode);
 	router.post("/api/login-admin", userController.handleLoginAdmin);
 
 	router.post("/api/add-cv", userController.handleCreateCV);
